@@ -109,7 +109,9 @@ input,textarea,select{font-size:16px}  /* 16px stops phones zooming into fields 
   .stat{font-size:22px}
   .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .metric b{font-size:17px}
-  .card .row>button,.card form>button[type=submit]{flex:1 1 auto;width:100%}
+  .card form>button[type=submit]{width:100%}
+  .card .row>button{flex:1 1 auto}
+  .card .row>select{width:100%!important}
   .row>input,.row>select{min-width:0}
   .login-card{padding:22px}
   .row.between>h2{width:100%}
@@ -118,9 +120,13 @@ input,textarea,select{font-size:16px}  /* 16px stops phones zooming into fields 
   .table thead{display:none}
   .table,.table tbody,.table tr,.table td{display:block;width:100%}
   .table tr{border:1px solid var(--line);border-radius:10px;padding:6px 10px;margin:0 0 10px;background:#fff}
-  .table td{border:0;padding:6px 0;display:flex;gap:12px;justify-content:space-between;text-align:right}
-  .table td[data-label]::before{content:attr(data-label);font-weight:700;color:var(--muted);text-align:left;flex:0 0 42%}
+  .table td{border:0;padding:6px 0;text-align:right;overflow:hidden}
+  .table td[data-label]::before{content:attr(data-label);float:left;width:40%;font-weight:700;color:var(--muted);text-align:left;padding-right:10px}
+  .table td:first-child{text-align:left;font-size:15px;padding:4px 0 10px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+  .table td:first-child::before{display:none}
   .table td:empty,.table td[data-label=""]::before{display:none}
-  .table td>button{flex:1}
+  .table td>button{width:100%;margin-top:4px}
 }
 @media(max-width:380px){.grid,.metric-grid{grid-template-columns:1fr}.steps .step{font-size:10px}}
+
+.row>select{max-width:100%}

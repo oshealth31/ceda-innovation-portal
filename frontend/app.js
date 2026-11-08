@@ -6,7 +6,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '
 const num = (n) => Number(n || 0).toLocaleString(undefined, { maximumFractionDigits: 0 });
 const money = (n) => (n === null || n === undefined ? '-' : `${CURRENCY} ${num(n)}`);
 const pct = (n) => (n === null || n === undefined ? '-' : Number(n).toFixed(1) + '%');
-const when = (iso) => (iso ? new Date(iso).toLocaleString() : '');
+const when = (iso) => (iso ? new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '');
 
 let token = sessionStorage.getItem('fl_token') || '';
 let me = null, current = null, viewing = null, page = 'dashboard';
