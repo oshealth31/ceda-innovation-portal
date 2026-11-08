@@ -44,7 +44,7 @@ code, ready = call('/api/health/ready')
 check('ready (database reachable)', ready['status'] == 'ready')
 _, page, hdrs = call('/', raw=True)
 check('portal served', b'Innovation Portal' in page)
-check('CSP header present', 'Content-Security-Policy' in hdrs)
+check('CSP header present', 'content-security-policy' in {k.lower() for k in hdrs})  # header names are case-insensitive
 try:
     call('/api/applications')
     check('API rejects anonymous', False)
