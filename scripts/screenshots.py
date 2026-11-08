@@ -108,9 +108,14 @@ call('PUT', f'/api/applications/{C}/assignments', admin, {'reviewer_ids': [ids['
 shots = []
 
 
-def snap(page, name, caption):
+def snap(page, name, caption, card=None):
+    """Viewport shot, or a shot of one card when `card` names its heading."""
     page.wait_for_timeout(700)
-    page.screenshot(path=str(OUT / f'{len(shots) + 1:02d}_{name}.png'), full_page=True)
+    path = str(OUT / f'{len(shots) + 1:02d}_{name}.png')
+    if card:
+        page.locator(f'.card:has(> h3:text-is("{card}"))').first.screenshot(path=path)
+    else:
+        page.screenshot(path=path)
     shots.append({'file': f'{len(shots) + 1:02d}_{name}.png', 'caption': caption})
 
 
@@ -139,7 +144,7 @@ def open_idea(page, title_part):
 
 with sync_playwright() as p:
     b = p.chromium.launch()
-    page = b.new_page(viewport={'width': 1280, 'height': 860})
+    page = b.new_page(viewport={'width': 1280, 'height': 900}, device_scale_factor=1.5)
     page.goto(BASE + '/')
     snap(page, 'login', 'Sign-in page')
 
@@ -151,14 +156,14 @@ with sync_playwright() as p:
     page.fill('textarea[name=problem]', 'Many rural households still rely on paraffin and candles for light.')
     snap(page, 'submit_form', 'Submit an idea: required fields are marked * and checked by the server')
     open_idea(page, 'AgriSense')
-    snap(page, 'submitter_sent_back', 'Submitter view of an idea sent back for revision, with the evaluator feedback')
-    open_idea(page, 'Kgotla Crafts')
-    snap(page, 'submitter_tracking', 'Submitter tracking an idea in adjudication: progress bar and timeline')
+    snap(page, 'submitter_sent_back', 'Submitter view of an idea sent back for revision: progress bar, notice and edit form')
+    snap(page, 'submitter_feedback', 'The timeline shows the evaluator feedback to the submitter', card='Timeline')
 
     ui_login(page, 'admin', ADMIN_PW)
     snap(page, 'admin_dashboard', 'Administrator dashboard: ideas at every stage')
     open_idea(page, 'SafeRide')
-    snap(page, 'admin_assign', 'Administrator assigns evaluators to an idea')
+    snap(page, 'admin_idea', 'Evaluator, adjudicator and administrator idea page: progress bar and idea details')
+    snap(page, 'admin_assign', 'Administrator assigns evaluators to an idea', card='Evaluators')
 
     ui_login(page, 'evaluator_thato', DEMO_PW)
     nav(page, 'applications')
@@ -166,18 +171,20 @@ with sync_playwright() as p:
     open_idea(page, 'SafeRide')
     for i, sel in enumerate(page.query_selector_all('form[data-form="scores"] select')):
         sel.select_option(str([4, 4, 5, 3, 4][i % 5]))
-    snap(page, 'evaluator_scoring', 'Evaluator scores each criterion from 1 to 5, independently')
+    snap(page, 'evaluator_scoring', 'Evaluator scores each criterion from 1 to 5, independently', card='Scoring')
 
     ui_login(page, 'committee1', DEMO_PW)
     nav(page, 'committee')
     snap(page, 'adjudication_queue', 'Adjudication queue')
     open_idea(page, 'Kgotla Crafts')
-    snap(page, 'adjudicator_panel', 'Adjudicator sees the panel scores, the disagreement warning and the decision buttons')
+    snap(page, 'adjudicator_panel', 'Adjudicator sees every evaluator\'s scores, the average and a disagreement warning', card='Scoring')
+    snap(page, 'adjudicator_decision', 'Adjudicator records the decision with feedback for the submitter', card='Decision')
 
     call('POST', f'/api/applications/{A}/decision', adj, {'decision': 'approve', 'rationale': 'Awarded. Strong local impact; agree a courier cost plan in the first month.'})
     ui_login(page, 'applicant1', DEMO_PW)
     open_idea(page, 'Kgotla Crafts')
-    snap(page, 'submitter_awarded', 'Submitter sees the award and the adjudicator feedback')
+    snap(page, 'submitter_awarded', 'Submitter sees the award on the progress bar')
+    snap(page, 'submitter_awarded_feedback', 'Award feedback in the submitter timeline', card='Timeline')
 
     ui_login(page, 'admin', ADMIN_PW)
     nav(page, 'scoring')

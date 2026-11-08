@@ -72,3 +72,6 @@ input[type=checkbox]{width:auto}
 .step.warn{background:#fff1dc;color:var(--warn)}
 .step.bad{background:#fbe5e5;color:var(--bad)}
 details summary{cursor:pointer;margin:10px 0}
+details.screen{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:0 0 16px}
+details.screen>summary{cursor:pointer;margin:0}
+details.screen[open]>summary{margin-bottom:12px}
