@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-fundinglens}
+      POSTGRES_USER: ${POSTGRES_USER:-fundinglens}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your .env}
+    volumes:
+      - fundinglens_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fundinglens} -d ${POSTGRES_DB:-fundinglens}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-production}
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-fundinglens}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-fundinglens}
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in your .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Set ADMIN_PASSWORD in your .env}
+      ACCESS_TOKEN_MINUTES: ${ACCESS_TOKEN_MINUTES:-60}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
+      MAX_UPLOAD_BYTES: ${MAX_UPLOAD_BYTES:-15000000}
+      SEED_DEMO: ${SEED_DEMO:-false}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      - fundinglens_docs:/app/data/documents
+volumes:
+  fundinglens_pg:
+  fundinglens_docs:

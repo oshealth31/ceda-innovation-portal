@@ -1,0 +1,52 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: fundinglens_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements*.txt
+      - run: pip install -r requirements-dev.txt
+      - name: Compile
+        run: python -m compileall -q backend
+      - name: Unit + API tests (SQLite)
+        run: python -m unittest discover -s tests -v
+      - name: API tests against PostgreSQL
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:testpass@localhost:5432/fundinglens_test
+        run: python -m unittest tests.test_api -v
+      - name: Frontend syntax
+        run: node --check frontend/app.js
+  container:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build -t fundinglens:ci .
+      - name: Run container and smoke-test it
+        env:
+          JWT_SECRET: ci-only-secret-0123456789-0123456789-abcdef
+          ADMIN_PASSWORD: ci-admin-password-1
+          DEMO_PASSWORD: ci-demo-password-1
+        run: |
+          docker run -d --name fl -p 8000:8000 \
+            -e ENVIRONMENT=production -e JWT_SECRET -e ADMIN_PASSWORD -e SEED_DEMO=true -e DEMO_PASSWORD fundinglens:ci
+          python3 scripts/smoke_test.py http://localhost:8000 officer1 "$DEMO_PASSWORD" committee1 || (docker logs fl; exit 1)

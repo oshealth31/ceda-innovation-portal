@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CEDA Innovation Portal - Prototype</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="login" class="login">
+  <div class="login-card">
+    <div class="brand">CEDA Innovation Portal</div>
+    <div class="tag">Submit, evaluate and recognise innovative ideas. Prototype built on FundingLens AI.</div>
+    <form id="loginForm" autocomplete="on">
+      <div class="field"><label for="username">Username</label><input id="username" autocomplete="username" required></div>
+      <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" required></div>
+      <button class="wide" type="submit">Sign in</button>
+    </form>
+    <p id="loginError" class="small bad notice-box hidden"></p>
+    <p class="small muted">Authorised users only. Contact the portal administrator for an account.</p>
+  </div>
+</div>
+
+<div id="portal" class="hidden">
+  <div class="shell">
+    <aside id="side" class="side">
+      <div class="brand">Innovation Portal</div>
+      <div id="nav"></div>
+      <div class="side-footer">Every action is recorded in a tamper-evident audit log. People make every decision.<br><span id="ver"></span></div>
+    </aside>
+    <main class="main">
+      <div class="top">
+        <div class="row"><button class="ghost mobile-menu" data-action="menu" aria-label="Menu">&#9776;</button><h1 id="title">Dashboard</h1></div>
+        <div class="row"><span id="userInfo" class="user"></span><button class="ghost" data-action="logout">Sign out</button></div>
+      </div>
+      <div id="page"></div>
+    </main>
+  </div>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+DEMONSTRATION SUPPLIER QUOTATION
+
+Supplier: Example Equipment Supplier
+Equipment package: BWP 320,000
+Validity: 30 days
+This is synthetic demonstration evidence and must not be treated as a real quotation.
