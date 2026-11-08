@@ -1,0 +1,31 @@
+name: Screenshots
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/screenshots.py', '.github/workflows/screenshots.yml']
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build and start the portal
+        env:
+          JWT_SECRET: screenshots-only-secret-0123456789-abcdefgh
+          ADMIN_PASSWORD: Screens-admin-pass-1
+          DEMO_PASSWORD: Screens-demo-pass-1
+        run: |
+          docker build -t portal:shots .
+          docker run -d --name portal -p 8000:8000 -e ENVIRONMENT=production -e JWT_SECRET -e ADMIN_PASSWORD \
+            -e SEED_DEMO=true -e DEMO_PASSWORD -e DEFAULT_INSTITUTION_NAME="CEDA Innovation Portal (Prototype)" portal:shots
+      - name: Install Playwright
+        run: pip install playwright && python -m playwright install --with-deps chromium
+      - name: Capture screenshots
+        run: python scripts/screenshots.py http://localhost:8000 Screens-admin-pass-1 Screens-demo-pass-1 shots || (docker logs portal | tail -50; exit 1)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: shots/
