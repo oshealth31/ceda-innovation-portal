@@ -109,12 +109,28 @@ async function show(id) {
   page = id;
   document.querySelectorAll('.nav').forEach((x) => x.classList.toggle('active', x.dataset.page === id));
   $('title').textContent = TITLES[id] || 'CEDA Innovation Portal';
-  $('side').classList.remove('open');
+  setMenu(false);
   $('page').innerHTML = '<div class="empty">Loading...</div>';
   try { await ({ dashboard: pDashboard, applications: pApplications, new: pNew, review: pReview, committee: pCommittee, scoring: pScoring, standards: pStandards,
     programmes: pProgrammes, knowledge: pKnowledge, management: pManagement, notifications: pNotifications, users: pUsers, audit: pAudit, settings: pSettings }[id])(); }
   catch (e) { $('page').innerHTML = `<div class="card bad">${esc(e.message)}</div>`; }
 }
+
+/* ---------- responsive helpers ---------- */
+function setMenu(open) {
+  $('side').classList.toggle('open', open);
+  document.body.classList.toggle('menu-open', open);
+  const b = document.querySelector('[data-action="menu"].mobile-menu'); if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
+/* Phones show tables as stacked cards: copy each column header onto its cells as a label. */
+function labelTables(root) {
+  root.querySelectorAll('table.table').forEach((t) => {
+    const heads = [...t.querySelectorAll('thead th')].map((th) => th.textContent.trim());
+    t.querySelectorAll('tbody tr').forEach((tr) => [...tr.children].forEach((td, i) => { if (heads[i] && !td.hasAttribute('data-label')) td.setAttribute('data-label', heads[i]); }));
+  });
+}
+new MutationObserver(() => labelTables($('page'))).observe($('page'), { childList: true, subtree: true });
 
 /* ---------- pages ---------- */
 function appRows(items) {
@@ -228,7 +244,7 @@ async function renderStaffReview() {
   let h = `<div class="card"><div class="row between"><div><h2>${esc(a.idea_title || a.applicant_name)}</h2><div class="small muted">${esc(a.applicant_name)}</div>${statusPill(a.status)} ${a.programme ? pill(a.programme.name) : ''}</div>
     <div class="row">${versions.length ? `<select data-change="version" style="width:auto">${versions.map((v) => `<option value="${v.version}" ${(viewing ?? a.assessment_version) === v.version ? 'selected' : ''}>Assessment v${v.version} (${esc(v.trigger.replace('_', ' '))}, ${esc(when(v.created_at))})</option>`).join('')}</select>` : ''}
     <button class="ghost" data-action="nav" data-page="applications">Back</button></div></div>${stepper(a.status)}${elig}</div>`;
-  h += ideaCard(a) + assignCard(a, assigned, users) + scoreCard(a, scores);
+  h += `<div class="two">${ideaCard(a)}${assignCard(a, assigned, users)}</div>` + scoreCard(a, scores);
   if (hist) h += `<div class="banner warn">You are viewing historical assessment v${viewing} (read-only). <button class="small" data-action="latest-version">Back to latest</button></div>`;
   h += hist ? '' : uploadCard();
   if (r) {
@@ -392,7 +408,7 @@ async function pSettings() {
 const formData = (f) => Object.fromEntries(new FormData(f).entries());
 const numOrNull = (v) => (v === '' || v === undefined || v === null ? null : Number(v));
 const actions = {
-  menu: () => $('side').classList.toggle('open'),
+  menu: () => setMenu(!$('side').classList.contains('open')),
   logout,
   nav: (t) => show(t.dataset.page),
   'open-app': (t) => openApp(t.dataset.id).catch((e) => toast(e.message)),

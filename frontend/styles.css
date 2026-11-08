@@ -78,3 +78,49 @@ details.screen[open]>summary{margin-bottom:12px}
 .main{min-width:0}
 .top>.row{min-width:0}
 @media(max-width:600px){.user{display:none}.steps{gap:4px}.step{min-width:0;font-size:11px;padding:7px 3px}.top{flex-wrap:nowrap}.inline-form{grid-template-columns:1fr}}
+
+/* ---------- responsive layout ----------
+   phones <=600px | tablets 601-960px (slide-out menu) | laptops 961-1279px (narrow sidebar) | desktops >=1280px | wide >=1680px */
+input,textarea,select{font-size:16px}  /* 16px stops phones zooming into fields */
+.side{height:100dvh}
+.backdrop{display:none;position:fixed;inset:0;background:#0b1a2e80;z-index:9}
+.two{display:grid;grid-template-columns:1fr;gap:15px;margin-bottom:15px}
+.two>.card{margin:0}
+.table td[data-label]::before{content:none}
+.toast{bottom:calc(20px + env(safe-area-inset-bottom))}
+@media(min-width:961px) and (max-width:1279px){.shell{grid-template-columns:210px 1fr}.side{padding:16px}.side .brand{font-size:21px}.nav{padding:9px 10px;font-size:14px}.main{padding:18px}}
+@media(min-width:1280px){.two{grid-template-columns:3fr 2fr}}
+@media(min-width:1680px){.shell{grid-template-columns:270px 1fr}.main{max-width:1600px;padding:28px 36px}}
+@media(max-width:960px){
+  .shell{grid-template-columns:1fr}
+  .side{position:fixed;z-index:10;left:-280px;top:0;width:260px;transition:left .2s;box-shadow:none}
+  .side.open{left:0;box-shadow:0 0 40px #0006}
+  body.menu-open{overflow:hidden}
+  body.menu-open .backdrop{display:block}
+  .mobile-menu{display:inline-block}
+  .top{position:sticky;top:0;z-index:5;background:var(--bg);margin:-14px -14px 16px;padding:10px 14px;border-bottom:1px solid var(--line)}
+  .main{padding:14px}
+}
+@media(max-width:600px){
+  .top h1{font-size:19px}
+  .card,details.screen{padding:13px;border-radius:12px}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .grid .card{margin:0}
+  .stat{font-size:22px}
+  .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .metric b{font-size:17px}
+  .card .row>button,.card form>button[type=submit]{flex:1 1 auto;width:100%}
+  .row>input,.row>select{min-width:0}
+  .login-card{padding:22px}
+  .row.between>h2{width:100%}
+  /* tables become stacked cards */
+  .table{min-width:0}
+  .table thead{display:none}
+  .table,.table tbody,.table tr,.table td{display:block;width:100%}
+  .table tr{border:1px solid var(--line);border-radius:10px;padding:6px 10px;margin:0 0 10px;background:#fff}
+  .table td{border:0;padding:6px 0;display:flex;gap:12px;justify-content:space-between;text-align:right}
+  .table td[data-label]::before{content:attr(data-label);font-weight:700;color:var(--muted);text-align:left;flex:0 0 42%}
+  .table td:empty,.table td[data-label=""]::before{display:none}
+  .table td>button{flex:1}
+}
+@media(max-width:380px){.grid,.metric-grid{grid-template-columns:1fr}.steps .step{font-size:10px}}

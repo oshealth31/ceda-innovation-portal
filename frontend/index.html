@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10243f">
 <title>CEDA Innovation Portal - Prototype</title>
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -30,13 +31,14 @@
     </aside>
     <main class="main">
       <div class="top">
-        <div class="row"><button class="ghost mobile-menu" data-action="menu" aria-label="Menu">&#9776;</button><h1 id="title">Dashboard</h1></div>
+        <div class="row"><button class="ghost mobile-menu" data-action="menu" aria-label="Open menu" aria-controls="side" aria-expanded="false">&#9776;</button><h1 id="title">Dashboard</h1></div>
         <div class="row"><span id="userInfo" class="user"></span><button class="ghost" data-action="logout">Sign out</button></div>
       </div>
       <div id="page"></div>
     </main>
   </div>
 </div>
+<div id="backdrop" class="backdrop" data-action="menu" aria-hidden="true"></div>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script src="app.js"></script>
 </body>

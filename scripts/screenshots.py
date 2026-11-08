@@ -205,6 +205,37 @@ with sync_playwright() as p:
     m.wait_for_selector('#page h2')
     m.wait_for_timeout(900)
     snap(m, 'mobile', 'The same submitter page on a phone')
+
+    # ---- responsive pass: the same pages at five screen sizes
+    R = OUT / 'responsive'
+    R.mkdir(exist_ok=True)
+    sizes = [('phone', 360, 780, True), ('tablet', 768, 1024, True), ('laptop', 1024, 768, False),
+             ('desktop', 1440, 900, False), ('wide', 1920, 1080, False)]
+
+    def go(pg, page_name):
+        pg.eval_on_selector(f'#nav [data-page="{page_name}"]', 'e => e.click()')
+        pg.wait_for_timeout(900)
+
+    def open_js(pg, title_part):
+        go(pg, 'applications')
+        pg.eval_on_selector(f'tr:has-text("{title_part}") [data-action="open-app"]', 'e => e.click()')
+        pg.wait_for_selector('#page h2')
+        pg.wait_for_timeout(900)
+
+    for label, w, h, mobile in sizes:
+        pg = b.new_page(viewport={'width': w, 'height': h}, device_scale_factor=2 if mobile else 1, is_mobile=mobile, has_touch=mobile)
+        full = w <= 768
+        ui_login(pg, 'admin', ADMIN_PW)
+        pg.screenshot(path=str(R / f'{label}_1_dashboard.png'), full_page=full)
+        go(pg, 'applications')
+        pg.screenshot(path=str(R / f'{label}_2_ideas.png'), full_page=full)
+        open_js(pg, 'Kgotla Crafts')
+        pg.screenshot(path=str(R / f'{label}_3_review.png'), full_page=False)
+        if mobile:
+            pg.click('[data-action="menu"].mobile-menu')
+            pg.wait_for_timeout(500)
+            pg.screenshot(path=str(R / f'{label}_4_menu.png'))
+        pg.close()
     b.close()
 
 (OUT / 'captions.json').write_text(json.dumps(shots, indent=1))
