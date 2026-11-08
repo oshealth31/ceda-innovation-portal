@@ -189,8 +189,8 @@ class ApiScenario(unittest.TestCase):
         crit = self.c.get('/api/score-criteria', headers=o).json()
         self.assertEqual(len(crit), 5)
         self.assertEqual(self.c.get(f'/api/applications/{app_id}', headers=o).json()['can_score'], True)
-        values = [5, 4, 3, 4, 5]  # weights 25/25/25/15/10 -> 82.0
-        body = {'scores': [{'criterion_id': x['id'], 'score': v, 'comment': 'ok'} for x, v in zip(crit, values)]}
+        values = {'innovation': 5, 'feasibility': 4, 'impact': 3, 'team': 4, 'alignment': 5}  # weights 25/25/25/15/10 -> 82.0
+        body = {'scores': [{'criterion_id': x['id'], 'score': values[x['key']], 'comment': 'ok'} for x in crit]}
         self.assertEqual(self.c.put(path, headers=c, json=body).status_code, 409)  # adjudicators score after referral
         self.assertEqual(self.c.put(path, headers=o, json={'scores': [{'criterion_id': crit[0]['id'], 'score': 6}]}).status_code, 422)
         self.assertEqual(self.c.put(path, headers=o, json={'scores': [{'criterion_id': 'nope', 'score': 3}]}).status_code, 422)

@@ -1528,7 +1528,7 @@ def score_criteria_rows(s: Session, inst_id: str, enabled_only: bool = True) -> 
     q = select(ScoreCriterion).where(ScoreCriterion.institution_id == inst_id)
     if enabled_only:
         q = q.where(ScoreCriterion.enabled == True)  # noqa: E712
-    return list(s.scalars(q.order_by(ScoreCriterion.created_at, ScoreCriterion.key)).all())
+    return list(s.scalars(q.order_by(ScoreCriterion.weight.desc(), ScoreCriterion.label)).all())  # deterministic on every database
 
 
 def score_criterion_dict(c: ScoreCriterion) -> dict:
