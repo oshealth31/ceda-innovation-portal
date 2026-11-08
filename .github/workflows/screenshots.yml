@@ -26,6 +26,7 @@ jobs:
       - name: Capture screenshots
         run: python scripts/screenshots.py http://localhost:8000 Screens-admin-pass-1 Screens-demo-pass-1 shots || (docker logs portal | tail -50; exit 1)
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: screenshots
           path: shots/

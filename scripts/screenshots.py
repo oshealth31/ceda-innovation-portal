@@ -192,10 +192,10 @@ with sync_playwright() as p:
 
     m = b.new_page(viewport={'width': 390, 'height': 844}, device_scale_factor=2, is_mobile=True)
     ui_login(m, 'applicant1', DEMO_PW)
-    m.click('[data-action="menu"]') if m.is_visible('[data-action="menu"]') else None
-    m.wait_for_timeout(300)
-    nav(m, 'applications')
-    m.click('tr:has-text("AgriSense") [data-action="open-app"]')
+    m.eval_on_selector('#nav [data-page="applications"]', 'e => e.click()')  # menu is a slide-out drawer on phones
+    m.wait_for_timeout(900)
+    m.eval_on_selector('tr:has-text("AgriSense") [data-action="open-app"]', 'e => e.click()')
+    m.wait_for_selector('#page h2')
     m.wait_for_timeout(900)
     snap(m, 'mobile', 'The same submitter page on a phone')
     b.close()
