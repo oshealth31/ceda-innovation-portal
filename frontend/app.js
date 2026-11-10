@@ -1,5 +1,5 @@
 'use strict';
-/* CEDA Innovation Portal (built on FundingLens AI). No inline handlers (strict CSP): all clicks/submits are delegated via data-action / data-form. */
+/* CEDA Innovation Management Portal (built on FundingLens AI). No inline handlers (strict CSP): all clicks/submits are delegated via data-action / data-form. */
 const CURRENCY = 'BWP';
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s ?? '').replace(/[&<>'"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
@@ -108,7 +108,7 @@ function logout() {
 async function show(id) {
   page = id;
   document.querySelectorAll('.nav').forEach((x) => x.classList.toggle('active', x.dataset.page === id));
-  $('title').textContent = TITLES[id] || 'CEDA Innovation Portal';
+  $('title').textContent = TITLES[id] || 'CEDA Innovation Management Portal';
   setMenu(false);
   $('page').innerHTML = '<div class="empty">Loading...</div>';
   try { await ({ dashboard: pDashboard, applications: pApplications, new: pNew, review: pReview, committee: pCommittee, scoring: pScoring, standards: pStandards,

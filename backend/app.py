@@ -183,7 +183,7 @@ class Application(Base):
     owner_contribution: Mapped[float] = mapped_column(Money, default=0)
     revenue_override: Mapped[float | None] = mapped_column(Money, nullable=True)
     expenses_override: Mapped[float | None] = mapped_column(Money, nullable=True)
-    # Innovation-idea fields (CEDA Innovation Portal). Required for submitters at creation time.
+    # Innovation-idea fields (CEDA Innovation Management Portal). Required for submitters at creation time.
     idea_title: Mapped[str] = mapped_column(String(200), default='')
     problem: Mapped[str] = mapped_column(Text, default='')
     solution: Mapped[str] = mapped_column(Text, default='')
@@ -906,6 +906,8 @@ def seed():
             inst = Institution(id=new_id(), name=os.getenv('DEFAULT_INSTITUTION_NAME', 'FundingLens Pilot Institution'), code=code)
             s.add(inst)
             s.flush()
+        elif os.getenv('DEFAULT_INSTITUTION_NAME') and inst.name != os.getenv('DEFAULT_INSTITUTION_NAME'):
+            inst.name = os.getenv('DEFAULT_INSTITUTION_NAME')  # keep the deployed name in step with configuration
         admin = s.scalar(select(User).where(User.username == 'admin'))
         if not admin:
             admin = User(username='admin', password_hash=hash_password(ADMIN_PASSWORD), role='admin', institution_id=inst.id)

@@ -28,4 +28,4 @@ services:
       - key: DEMO_PASSWORD
         sync: false
       - key: DEFAULT_INSTITUTION_NAME
-        value: CEDA Innovation Portal (Prototype)
+        value: CEDA Innovation Management Portal (Prototype)

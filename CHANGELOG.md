@@ -3,7 +3,7 @@
 Version number lives in one place: the `VERSION` file. `backend/app.py` reads it; `/api/health`, reports and the Docker image all follow.
 
 ## 1.3.0 - 2026-11-08
-CEDA Innovation Portal edition (hackathon prototype). **Requires a fresh database** (new columns and tables).
+CEDA Innovation Management Portal edition (hackathon prototype). Renamed to match the updated hackathon guidelines (10 Nov 2026). **Requires a fresh database** (new columns and tables).
 
 ### Product
 - **Idea submission**: title, problem, solution, target users, sector and stage. Required for submitters; checked by the server, not just the form.

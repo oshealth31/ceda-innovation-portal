@@ -22,7 +22,7 @@ jobs:
         run: |
           docker build -t portal:shots .
           docker run -d --name portal -p 8000:8000 -e ENVIRONMENT=production -e JWT_SECRET -e ADMIN_PASSWORD \
-            -e SEED_DEMO=true -e DEMO_PASSWORD -e DEFAULT_INSTITUTION_NAME="CEDA Innovation Portal (Prototype)" portal:shots
+            -e SEED_DEMO=true -e DEMO_PASSWORD -e DEFAULT_INSTITUTION_NAME="CEDA Innovation Management Portal (Prototype)" portal:shots
       - name: Install Playwright
         run: pip install playwright && python -m playwright install --with-deps chromium
       - name: Capture screenshots

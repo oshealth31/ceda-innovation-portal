@@ -43,7 +43,7 @@ check('health', code == 200 and h['status'] == 'ok', h.get('version'))
 code, ready = call('/api/health/ready')
 check('ready (database reachable)', ready['status'] == 'ready')
 _, page, hdrs = call('/', raw=True)
-check('portal served', b'Innovation Portal' in page)
+check('portal served', b'Innovation Management Portal' in page)
 check('CSP header present', 'content-security-policy' in {k.lower() for k in hdrs})  # header names are case-insensitive
 try:
     call('/api/applications')

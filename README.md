@@ -1,6 +1,6 @@
-# CEDA Innovation Portal (FundingLens AI v1.3.0)
+# CEDA Innovation Management Portal (FundingLens AI v1.3.0)
 
-Prototype for the CEDA Innovation Portal Hackathon (November 2026), built on the FundingLens AI platform.
+Prototype for the CEDA Innovation Management Portal Hackathon (9-12 November 2026), built on the FundingLens AI platform.
 
 ## CEDA demo in 6 steps
 1. **Submitter** (`applicant1`) submits an idea: required fields, then an idea document.
