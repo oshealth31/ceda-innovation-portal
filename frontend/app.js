@@ -117,11 +117,20 @@ async function show(id) {
 }
 
 /* ---------- responsive helpers ---------- */
-function setMenu(open) {
+function drawMenu(open) {
   $('side').classList.toggle('open', open);
   document.body.classList.toggle('menu-open', open);
   const b = document.querySelector('[data-action="menu"].mobile-menu'); if (b) b.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
+/* Opening the menu adds a history step, so the phone's Back button closes it instead of leaving the portal. */
+function setMenu(open) {
+  const was = $('side').classList.contains('open');
+  if (open === was) return;
+  drawMenu(open);
+  if (open) history.pushState({ menu: true }, '');
+  else if (history.state && history.state.menu) history.back();
+}
+window.addEventListener('popstate', () => { if ($('side').classList.contains('open')) drawMenu(false); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
 /* Phones show tables as stacked cards: copy each column header onto its cells as a label. */
 function labelTables(root) {
@@ -409,6 +418,7 @@ const formData = (f) => Object.fromEntries(new FormData(f).entries());
 const numOrNull = (v) => (v === '' || v === undefined || v === null ? null : Number(v));
 const actions = {
   menu: () => setMenu(!$('side').classList.contains('open')),
+  'menu-close': () => setMenu(false),
   logout,
   nav: (t) => show(t.dataset.page),
   'open-app': (t) => openApp(t.dataset.id).catch((e) => toast(e.message)),

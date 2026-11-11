@@ -24,7 +24,7 @@ input[type=checkbox]{width:auto}
 .nav{display:block;width:100%;text-align:left;background:transparent;color:#dbe6f6;margin:3px 0;padding:11px;border-radius:8px}
 .nav.active,.nav:hover{background:#ffffff18;color:#fff}
 .side-footer{margin-top:24px;color:#b7c7dc;font-size:12px}
-.main{padding:22px;max-width:1500px;width:100%;margin:auto}
+.main{padding:22px;max-width:1500px;width:100%;margin:0 auto;box-sizing:border-box}
 .top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
 .top h1{margin:0;font-size:25px}
 .user{font-size:13px;color:var(--muted)}
@@ -114,7 +114,8 @@ input,textarea,select{font-size:16px}  /* 16px stops phones zooming into fields 
   .card .row>select{width:100%!important}
   .row>input,.row>select{min-width:0}
   .login-card{padding:22px}
-  .row.between>h2{width:100%}
+  .row.between>h2{flex:1 1 auto;min-width:0}
+  .row.between>button{flex:0 0 auto}
   /* tables become stacked cards */
   .table{min-width:0}
   .table thead{display:none}
@@ -130,3 +131,18 @@ input,textarea,select{font-size:16px}  /* 16px stops phones zooming into fields 
 @media(max-width:380px){.grid,.metric-grid{grid-template-columns:1fr}.steps .step{font-size:10px}}
 
 .row>select{max-width:100%}
+
+/* menu header and close button */
+.side-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.side-close{display:none;background:transparent;color:#fff;border:0;font-size:30px;line-height:1;padding:2px 8px;margin:-4px -8px 0 0;cursor:pointer}
+@media(max-width:960px){
+  .side-close{display:block}
+  .side{width:min(280px,82vw);left:calc(-1 * min(280px,82vw) - 20px);padding-top:calc(16px + env(safe-area-inset-top))}
+  .side .brand{font-size:20px;line-height:1.25}
+  .main{padding:14px 14px calc(24px + env(safe-area-inset-bottom))}
+}
+@media(max-width:600px){
+  .table td>button{width:100%;padding:9px 12px}
+  .top{gap:8px}
+  .top .ghost:not(.mobile-menu){padding:8px 12px}
+}
