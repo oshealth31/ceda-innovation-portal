@@ -1,0 +1,82 @@
+[
+ {
+  "file": "01_login.png",
+  "caption": "Sign-in page"
+ },
+ {
+  "file": "02_submitter_dashboard.png",
+  "caption": "Submitter dashboard: my ideas and their status"
+ },
+ {
+  "file": "03_submit_form.png",
+  "caption": "Submit an idea: required fields are marked * and checked by the server"
+ },
+ {
+  "file": "04_submitter_sent_back.png",
+  "caption": "Submitter view of an idea sent back for revision: progress bar, notice and edit form"
+ },
+ {
+  "file": "05_submitter_feedback.png",
+  "caption": "The timeline shows the evaluator feedback to the submitter"
+ },
+ {
+  "file": "06_admin_dashboard.png",
+  "caption": "Administrator dashboard: ideas at every stage"
+ },
+ {
+  "file": "07_admin_idea.png",
+  "caption": "Evaluator, adjudicator and administrator idea page: progress bar and idea details"
+ },
+ {
+  "file": "08_admin_assign.png",
+  "caption": "Administrator assigns evaluators to an idea"
+ },
+ {
+  "file": "09_evaluator_list.png",
+  "caption": "Evaluator sees only the ideas assigned to them"
+ },
+ {
+  "file": "10_evaluator_scoring.png",
+  "caption": "Evaluator scores each criterion from 1 to 5, independently"
+ },
+ {
+  "file": "11_adjudication_queue.png",
+  "caption": "Adjudication queue"
+ },
+ {
+  "file": "12_adjudicator_panel.png",
+  "caption": "Adjudicator sees every evaluator's scores, the average and a disagreement warning"
+ },
+ {
+  "file": "13_adjudicator_decision.png",
+  "caption": "Adjudicator records the decision with feedback for the submitter"
+ },
+ {
+  "file": "14_submitter_awarded.png",
+  "caption": "Submitter sees the award on the progress bar"
+ },
+ {
+  "file": "15_submitter_awarded_feedback.png",
+  "caption": "Award feedback in the submitter timeline"
+ },
+ {
+  "file": "16_scoring_criteria.png",
+  "caption": "Administrator configures scoring criteria and weights without code changes"
+ },
+ {
+  "file": "17_reports.png",
+  "caption": "Reporting: status counts and programme KPIs"
+ },
+ {
+  "file": "18_audit.png",
+  "caption": "Tamper-evident audit trail with an integrity check"
+ },
+ {
+  "file": "19_users.png",
+  "caption": "User management with the four CEDA roles"
+ },
+ {
+  "file": "20_mobile.png",
+  "caption": "The same submitter page on a phone"
+ }
+]
