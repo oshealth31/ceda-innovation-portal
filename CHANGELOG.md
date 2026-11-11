@@ -2,6 +2,10 @@
 
 Version number lives in one place: the `VERSION` file. `backend/app.py` reads it; `/api/health`, reports and the Docker image all follow.
 
+## 1.3.1 - 2026-11-11
+- Phones: no empty band above pages; the menu closes by tapping outside it, with its x button, or with the phone's Back button.
+- Releases now reach phones straight away: the page, styles and script are served with `Cache-Control: no-cache`, and the page asks for `styles.css` and `app.js` by version, so a browser can never pair a new page with an old stylesheet.
+
 ## 1.3.0 - 2026-11-08
 CEDA Innovation Management Portal edition (hackathon prototype). Renamed to match the updated hackathon guidelines (10 Nov 2026). **Requires a fresh database** (new columns and tables).
 

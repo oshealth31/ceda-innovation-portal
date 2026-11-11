@@ -3,6 +3,7 @@
     python -m unittest tests.test_api -v
     TEST_DATABASE_URL=postgresql://user:pw@localhost/db python -m unittest tests.test_api -v
 """
+from pathlib import Path
 import os
 import sys
 import tempfile
@@ -423,6 +424,17 @@ class ApiScenario(unittest.TestCase):
         self.assertEqual(tl['status'], 'under_review')
         self.assertEqual(sum(1 for e in tl['events'] if e['kind'] == 'submitted'), 2)
         self.assertEqual(self.c.get(f'/api/applications/{app_id}/timeline', headers=self.login('officer2')).status_code, 404)
+
+    # ---- 22 browsers always revalidate the page, styles and script
+    def test_22_static_files_are_revalidated(self):
+        for path in ('/', '/styles.css', '/app.js'):
+            r = self.c.get(path)
+            self.assertEqual(r.status_code, 200, path)
+            self.assertEqual(r.headers.get('cache-control'), 'no-cache', path)
+        page = self.c.get('/').text
+        version = (Path(__file__).resolve().parents[1] / 'VERSION').read_text().strip()
+        self.assertIn(f'styles.css?v={version}', page, 'bump the ?v= in index.html when VERSION changes')
+        self.assertIn(f'app.js?v={version}', page, 'bump the ?v= in index.html when VERSION changes')
 
 if __name__ == '__main__':
     unittest.main()

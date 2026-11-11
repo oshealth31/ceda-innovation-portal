@@ -1011,6 +1011,10 @@ async def security_middleware(request: Request, call_next):
         h['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
     if request.url.path.startswith('/api/'):
         h['Cache-Control'] = 'no-store'
+    else:
+        # the page, styles and script: browsers must check for a newer copy on every visit (cheap, thanks to ETags),
+        # so a phone never mixes a new page with an old stylesheet after a release
+        h['Cache-Control'] = 'no-cache'
     return response
 
 

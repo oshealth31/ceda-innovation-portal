@@ -1,4 +1,4 @@
-# CEDA Innovation Management Portal (FundingLens AI v1.3.0)
+# CEDA Innovation Management Portal (FundingLens AI v1.3.1)
 
 Prototype for the CEDA Innovation Management Portal Hackathon (9-12 November 2026), built on the FundingLens AI platform.
 
